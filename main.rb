@@ -2,8 +2,8 @@ load './board.rb'
 load './user.rb'
 load './robot.rb'
 
-board 		 = Board.new
-player 		 = UserPlayer.instance(board)
+board        = Board.new
+player       = UserPlayer.instance(board)
 robot_player = RobotPlayer.instance(board)
 
 
