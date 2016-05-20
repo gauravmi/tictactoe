@@ -11,11 +11,13 @@ end
 
 class Board
   include Matrix
+  attr_reader :init_move
 
   def initialize
     @matrix = [ ['r0c0', 'r0c1', 'r0c2'],
                 ['r1c0', 'r1c1', 'r1c2'],
                 ['r2c0', 'r2c1', 'r2c2']  ]
+    @init_move = nil
   end
 
   def length
@@ -48,6 +50,7 @@ class Board
 
   def mark(player, position_x, position_y)
     raise LocationNotEmpty, "this location is already marked by your opponent" if !position_empty?(@matrix[position_x][position_y])
+    @init_move ||= [position_x, position_y]
     @matrix[position_x][position_y] = player.to_s
   end
 
@@ -62,6 +65,10 @@ class Board
 
   def is_board_empty?
     @matrix.all? { |row| row.all?{|position|  !position.match(/r\dc\d/).nil? } }
+  end
+
+  def number_of_empty_locations
+    @matrix.inject(0){|count, row| count = count + row.count{|element| position_empty?(element) } }
   end
 
   private
