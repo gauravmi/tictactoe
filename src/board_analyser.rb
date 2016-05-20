@@ -1,5 +1,3 @@
-load './src/player.rb'
-
 require 'pry'
 module BoardAnalyzer
   def with_strategy
