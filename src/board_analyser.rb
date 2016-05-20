@@ -16,18 +16,17 @@ module BoardAnalyzer
   end
 
   private
-  def analyze_and_get_position
-    winning_position = robot_winning?
-    return winning_position if winning_position
+  def robot_win_position(klass)
+    is_winning?(klass)
+  end
+  
+  alias dont_let_opponent_win_position robot_win_position
 
-    dont_let_opponent_win_position = is_winning?(opponent(self))
-    return dont_let_opponent_win_position if dont_let_opponent_win_position
+  def analyze_and_get_position
+    return robot_win_position(self) if robot_win_position(self)
+    return dont_let_opponent_win_position(opponent(self)) if dont_let_opponent_win_position(opponent(self))
 
     find_appropriate_position
-  end
-
-  def robot_winning?
-    is_winning?(self)
   end
 
   def index(element)
@@ -63,18 +62,8 @@ module BoardAnalyzer
     @board.is_user_player_winning?(self)
   end
 
-  def marking_first_time?
-      [ @board.each_row.select{|r| r.select{|e| e == self.to_s } },
-      @board.each_column.select{|c| c.select{|e| e == self.to_s } },
-      @board.each_diagonal.select{|d| d.select{|e| e == self.to_s } }].any?
-  end
-
-  def mark_random
-    @board.mark_random
-  end
-
   def find_appropriate_position
-    mark_random if marking_first_time?
+    [rand(0..@board.length),rand(0..@board.length)] if @board.is_board_empty?
   end
 end
 

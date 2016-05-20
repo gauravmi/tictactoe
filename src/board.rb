@@ -4,8 +4,9 @@ require 'pry'
 
 class EmptyBoard < Exception
 end
-
 class GameNotFinished < Exception
+end
+class LocationNotEmpty < Exception
 end
 
 class Board
@@ -15,6 +16,10 @@ class Board
     @matrix = [ ['r0c0', 'r0c1', 'r0c2'],
                 ['r1c0', 'r1c1', 'r1c2'],
                 ['r2c0', 'r2c1', 'r2c2']  ]
+  end
+
+  def length
+    @matrix.length - 1
   end
 
   def player_at(x, y)
@@ -42,15 +47,21 @@ class Board
   end
 
   def mark(player, position_x, position_y)
+    raise LocationNotEmpty, "this location is already marked by your opponent" if !position_empty?(@matrix[position_x][position_y])
     @matrix[position_x][position_y] = player.to_s
   end
 
-  def mark_random
-    # @matrix.flatten.select{|e| }
-  end
+  def show
+    @matrix.each do |row|
+      row.each do |element|
+        print "#{element}     "
+      end
+      print "\n"
+    end
+  end  
 
-  def to_s
-    p @matrix
+  def is_board_empty?
+    @matrix.all? { |row| row.all?{|position|  !position.match(/r\dc\d/).nil? } }
   end
 
   private
@@ -80,9 +91,5 @@ class Board
 
   def diagonal_with_identical_values
     winning_sequence(each_diagonal)
-  end
-
-  def is_board_empty?
-    @matrix.all? { |row| row.all?{|position|  !position.match(/r\dc\d/).nil? } }
   end
 end
