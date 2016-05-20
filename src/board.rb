@@ -5,6 +5,9 @@ require 'pry'
 class EmptyBoard < Exception
 end
 
+class GameNotFinished < Exception
+end
+
 class Board
   include Matrix
 
@@ -20,15 +23,17 @@ class Board
   end
 
   def who_won?
+    raise EmptyBoard, "Game is yet to start.!" if is_board_empty?
     return winner if winner
-    return "Draw" if isDraw?
+    return "Draw" if is_draw?
   end
 
   def game_over?
-    return @matrix.all?{|r| r.all?{|p| !position_empty?(p) } } || !winner.nil?
+    return is_board_empty? || !winner.nil?
   end
 
-  def isDraw?
+  def is_draw?
+    raise GameNotFinished, "Game is yet to finish.!" if @matrix.any?{|r| r.any?{|p| position_empty?(p) } }
     winner.nil? && game_over?
   end
 

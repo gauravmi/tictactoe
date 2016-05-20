@@ -6,14 +6,23 @@ board        = Board.new
 player       = UserPlayer.instance(board)
 robot_player = RobotPlayer.instance(board)
 
-player.move(0, 0)
+# player.move(0, 0)
+# player.move(0, 1)
+# player.move(0, 2)
 
-board.game_over?
-# robot_player.move
+# player.move(1, 0)
+# player.move(1, 1)
+# player.move(1, 2)
 
+# player.move(2, 0)
+# player.move(2, 1)
 # player.move(2, 2)
 
-# p board.who_won?
+# robot_player.move
+# robot_player.move
 
+
+# board.who_won?
 # board.player_at(1,1)
-# print board
+# board.game_over?
+# board.is_draw?
