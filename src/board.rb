@@ -51,22 +51,22 @@ class Board
     !position.match(/r\dc\d/).nil?
   end
 
-  def row_with_identical_values
+  def winning_sequence(iterator)
     winning_row = nil
-    each_row { |row| winning_row = same_values_in_a_seq(row) }
+    iterator { |row| winning_row = same_values_in_a_seq(row) }
     winning_row
   end
 
+  def row_with_identical_values
+    winning_sequence(each_row)
+  end
+
   def col_with_identical_values
-    winning_column = nil
-    each_column { |column| winning_column = same_values_in_a_seq(column) }
-    winning_column
+    winning_sequence(each_column)
   end
 
   def diagonal_with_identical_values
-    winning_d = nil
-    each_diagonal { |d| winning_d = same_values_in_a_seq(d) }
-    winning_d
+    winning_sequence(each_diagonal)
   end
 
   def is_board_empty?
