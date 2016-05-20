@@ -19,6 +19,17 @@ class Board
     @matrix[x][y]
   end
 
+  def who_won?
+    return row_with_identical_values[0] if row_with_identical_values
+    return col_with_identical_values[0] if col_with_identical_values
+    return diagonal_with_identical_values[0] if diagonal_with_identical_values
+    return "Draw" if isDraw?
+  end
+
+  def isDraw?
+
+  end
+
   def flatten
     @matrix.flatten
   end
@@ -31,17 +42,6 @@ class Board
     @matrix.flatten.select{|e| }
   end
 
-  def who_won?
-    return winner_row[0] if winner_row
-    return winner_column[0] if winner_column
-    return winner_diagonal[0] if winner_diagonal
-    return "Draw" if isDraw?
-  end
-
-  def isDraw?
-
-  end
-
   def to_s
     p @matrix
   end
@@ -51,21 +51,21 @@ class Board
     !position.match(/r\dc\d/).nil?
   end
 
-  def winner_row
+  def row_with_identical_values
     winning_row = nil
-    each_row.any? { |row| winning_row = same_values_in_a_seq(row) }
+    each_row { |row| winning_row = same_values_in_a_seq(row) }
     winning_row
   end
 
-  def winner_column
+  def col_with_identical_values
     winning_column = nil
-    each_column.any? { |column| winning_column = same_values_in_a_seq(column) }
+    each_column { |column| winning_column = same_values_in_a_seq(column) }
     winning_column
   end
 
-  def winner_diagonal
+  def diagonal_with_identical_values
     winning_d = nil
-    each_diagonal.any? { |d| winning_d = same_values_in_a_seq(d) }
+    each_diagonal { |d| winning_d = same_values_in_a_seq(d) }
     winning_d
   end
 
