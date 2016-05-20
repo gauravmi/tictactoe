@@ -20,14 +20,16 @@ class Board
   end
 
   def who_won?
-    return row_with_identical_values[0] if row_with_identical_values
-    return col_with_identical_values[0] if col_with_identical_values
-    return diagonal_with_identical_values[0] if diagonal_with_identical_values
+    return winner if winner
     return "Draw" if isDraw?
   end
 
-  def isDraw?
+  def game_over?
+    return @matrix.all?{|r| r.all?{|p| !position_empty?(p) } } || !winner.nil?
+  end
 
+  def isDraw?
+    winner.nil? && game_over?
   end
 
   def flatten
@@ -39,7 +41,7 @@ class Board
   end
 
   def mark_random
-    @matrix.flatten.select{|e| }
+    # @matrix.flatten.select{|e| }
   end
 
   def to_s
@@ -47,13 +49,19 @@ class Board
   end
 
   private
+  def winner
+    return row_with_identical_values[0] if row_with_identical_values
+    return col_with_identical_values[0] if col_with_identical_values
+    return diagonal_with_identical_values[0] if diagonal_with_identical_values
+  end
+
   def position_empty?(position)
     !position.match(/r\dc\d/).nil?
   end
 
-  def winning_sequence(iterator)
+  def winning_sequence(matrix)
     winning_row = nil
-    iterator { |row| winning_row = same_values_in_a_seq(row) }
+    matrix.each { |row| winning_row = same_values_in_a_seq(row) if same_values_in_a_seq(row) }
     winning_row
   end
 

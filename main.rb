@@ -7,12 +7,13 @@ player       = UserPlayer.instance(board)
 robot_player = RobotPlayer.instance(board)
 
 player.move(0, 0)
-player.move(1, 1)
-robot_player.move
+
+board.game_over?
+# robot_player.move
 
 # player.move(2, 2)
 
 # p board.who_won?
 
 # board.player_at(1,1)
-print board
+# print board
