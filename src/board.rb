@@ -40,25 +40,15 @@ class Board
   end
 
   def check_diagonals(player)  # logic belongs to board analyser
-    position = empty_position_on_left_diagonal(player)
-    return position if position
+    position = each_diagonal.collect do |diagonal|
+      player_winning_count = diagonal.select{|p| p.to_s == player.to_s }.count
+      index(empty_position_on(diagonal)) if player_winning_count == 2  
+    end
+
+    return position[0] unless position.empty?
     empty_position_on_right_diagonal(player)
   end
 
-  def empty_position_on_left_diagonal(player) # need to remove
-    diagonal = left_diagonal
-    player_winning_count = diagonal.select{|p| p.to_s == player.to_s }.count
-
-    index(empty_position_on(diagonal)) if player_winning_count == 2
-  end
-
-  def empty_position_on_right_diagonal(player) # need to remove
-    diagonal = right_diagonal
-    player_winning_count = diagonal.select{|p| p.to_s == player.to_s }.count
-
-    index(empty_position_on(diagonal)) if player_winning_count == 2
-  end
-    
   def is_winning?(player)
     [ check_rows(player), check_columns(player), check_diagonals(player) ].find{|e| e.is_a?(Array) }
   end

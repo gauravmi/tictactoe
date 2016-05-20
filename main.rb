@@ -6,7 +6,7 @@ board        = Board.new
 player       = UserPlayer.instance(board)
 robot_player = RobotPlayer.instance(board)
 
-player.move(1, 0)
+player.move(0, 0)
 player.move(1, 1)
 robot_player.move
 
