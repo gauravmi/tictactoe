@@ -7,20 +7,12 @@ class EmptyBoard < Exception
 end
 
 class Board
+  include Matrix
+
   def initialize
     @matrix = [ ['r0c0', 'r0c1', 'r0c2'],
                 ['r1c0', 'r1c1', 'r1c2'],
                 ['r2c0', 'r2c1', 'r2c2']  ]
-  end
-
-  def position_empty?(position)
-    !position.match(/r\dc\d/).nil?
-  end
-
-  def index(element)
-    flatten_position = @matrix.flatten.index(element)
-    row_size = @matrix.first.size
-    [flatten_position/row_size, flatten_position % row_size]    
   end
 
   def player_at(x, y)
@@ -29,22 +21,19 @@ class Board
   end
 
   def check_rows(player)
-    winning_row = @matrix.select{ |row| row.select{|p| p.to_s == player.to_s }.length == 2 }.first
-    index(player_not_present_at_element(winning_row)) if winning_row
+    about_to_win_row = @matrix.select{ |row| row.select{|p| p.to_s == player.to_s }.length == 2 }.first
+    index(player_not_present_at_element(about_to_win_row)) if about_to_win_row
   end
 
   def check_columns(player)
-    winning_row = @matrix.transpose.find{ |row| row.select{|p| p.to_s == player.to_s }.length == 2 }
-    index(player_not_present_at_element(winning_row)) if winning_row
+    about_to_win_column = @matrix.transpose.find{ |row| row.select{|p| p.to_s == player.to_s }.length == 2 }
+    index(player_not_present_at_element(about_to_win_column)) if about_to_win_column
   end
 
-  def left_diagonal
-    (0..@matrix.length-1).collect{|i| @matrix[i][i] }
-  end
-
-  def right_diagonal
-    offset = @matrix.length
-    (0..@matrix.length-1).collect{|i| offset=offset-1; @matrix[i][offset] }
+  def check_diagonals(player)
+    position = empty_position_on_left_diagonal(player)
+    return position if position
+    empty_position_on_right_diagonal(player)
   end
 
   def empty_position_on_left_diagonal(player)
@@ -57,14 +46,8 @@ class Board
   def empty_position_on_right_diagonal(player)
     diagonal = right_diagonal
     player_winning_count = diagonal.select{|p| p.to_s == player.to_s }.count
-    
-    index(player_not_present_at_element(diagonal)) if player_winning_count == 2
-  end
 
-  def check_diagonals(player)
-    position = empty_position_on_left_diagonal(player)
-    return position if position
-    empty_position_on_left_diagonal(player)
+    index(player_not_present_at_element(diagonal)) if player_winning_count == 2
   end
     
   def is_winning?(player)
@@ -77,18 +60,6 @@ class Board
 
   def mark_random
     @matrix.flatten.select{|e| }
-  end
-
-  def each_row(&block)
-    @matrix.each(&block)
-  end
-
-  def each_column(&block)
-    @matrix.transpose.each(&block)
-  end
-
-  def each_digonal(&block) 
-    [left_diagonal, right_diagonal].each(&block)
   end
 
   def who_won?
@@ -106,10 +77,6 @@ class Board
   end
 
   private
-
-  def same_values_in_a_seq(sequence)
-    sequence if (sequence.uniq.count == 1)
-  end
 
   def winner_on_the_row
     winning_row = nil
@@ -135,3 +102,39 @@ class Board
 end
 
 
+module Matrix
+  def left_diagonal
+    (0..@matrix.length-1).collect{|i| @matrix[i][i] }
+  end
+
+  def right_diagonal
+    offset = @matrix.length
+    (0..@matrix.length-1).collect{|i| offset=offset-1; @matrix[i][offset] }
+  end
+
+  def same_values_in_a_seq(sequence)
+    sequence if (sequence.uniq.count == 1)
+  end
+
+  def each_row(&block)
+    @matrix.each(&block)
+  end
+
+  def each_column(&block)
+    @matrix.transpose.each(&block)
+  end
+
+  def each_digonal(&block) 
+    [left_diagonal, right_diagonal].each(&block)
+  end
+
+  def position_empty?(position)
+    !position.match(/r\dc\d/).nil?
+  end
+
+  def index(element)
+    flatten_position = @matrix.flatten.index(element)
+    row_size = @matrix.first.size
+    [flatten_position/row_size, flatten_position % row_size]    
+  end
+end
