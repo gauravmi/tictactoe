@@ -7,10 +7,6 @@ module BoardAnalyzer
     yield(position_x, position_y)
   end
 
-  def opponent(player)
-    ObjectSpace.each_object(Player).select{|p| p.class != player.class }.first
-  end
-
   def empty_position_on(row)
     row.find{|e| e.match(/r\dc\d/) }
   end
@@ -24,7 +20,7 @@ module BoardAnalyzer
 
   def analyze_and_get_position
     return robot_win_position(self) if robot_win_position(self)
-    return dont_let_opponent_win_position(opponent(self)) if dont_let_opponent_win_position(opponent(self))
+    return dont_let_opponent_win_position(self.opponent) if dont_let_opponent_win_position(self.opponent)
 
     find_appropriate_position
   end

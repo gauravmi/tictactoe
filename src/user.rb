@@ -1,7 +1,6 @@
 load './src/player.rb'
 
 class UserPlayer < Player
-  attr_reader :player
   private_class_method :new
   
   def initialize(board)
