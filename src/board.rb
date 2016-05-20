@@ -29,30 +29,30 @@ class Board
     @matrix[x][y]
   end
 
-  def check_rows(player)
+  def check_rows(player) # logic belongs to board analyser
     about_to_win_row = @matrix.select{ |row| row.select{|p| p.to_s == player.to_s }.length == 2 }.first
     index(empty_position_on(about_to_win_row)) if about_to_win_row
   end
 
-  def check_columns(player)
+  def check_columns(player)  # logic belongs to board analyser
     about_to_win_column = @matrix.transpose.find{ |row| row.select{|p| p.to_s == player.to_s }.length == 2 }
     index(empty_position_on(about_to_win_column)) if about_to_win_column
   end
 
-  def check_diagonals(player)
+  def check_diagonals(player)  # logic belongs to board analyser
     position = empty_position_on_left_diagonal(player)
     return position if position
     empty_position_on_right_diagonal(player)
   end
 
-  def empty_position_on_left_diagonal(player)
+  def empty_position_on_left_diagonal(player) # need to remove
     diagonal = left_diagonal
     player_winning_count = diagonal.select{|p| p.to_s == player.to_s }.count
 
     index(empty_position_on(diagonal)) if player_winning_count == 2
   end
 
-  def empty_position_on_right_diagonal(player)
+  def empty_position_on_right_diagonal(player) # need to remove
     diagonal = right_diagonal
     player_winning_count = diagonal.select{|p| p.to_s == player.to_s }.count
 
