@@ -14,42 +14,13 @@ class Board
                 ['r2c0', 'r2c1', 'r2c2']  ]
   end
 
-  def empty_position_on(row)
-    row.find{|e| e.match(/r\dc\d/) }
-  end
-
-  def index(element)
-    flatten_position = @matrix.flatten.index(element)
-    row_size = @matrix.first.size
-    [flatten_position/row_size, flatten_position % row_size]    
-  end
-
   def player_at(x, y)
     return nil if position_empty?(@matrix[x][y])
     @matrix[x][y]
   end
 
-  def check_rows(player) # logic belongs to board analyser
-    about_to_win_row = @matrix.select{ |row| row.select{|p| p.to_s == player.to_s }.length == 2 }.first
-    index(empty_position_on(about_to_win_row)) if about_to_win_row
-  end
-
-  def check_columns(player)  # logic belongs to board analyser
-    about_to_win_column = @matrix.transpose.find{ |row| row.select{|p| p.to_s == player.to_s }.length == 2 }
-    index(empty_position_on(about_to_win_column)) if about_to_win_column
-  end
-
-  def check_diagonals(player)  # logic belongs to board analyser
-    position = each_diagonal.collect do |diagonal|
-      player_winning_count = diagonal.select{|p| p.to_s == player.to_s }.count
-      index(empty_position_on(diagonal)) if player_winning_count == 2  
-    end
-
-    return position[0] unless position.empty?
-  end
-
-  def is_winning?(player)
-    [ check_rows(player), check_columns(player), check_diagonals(player) ].find{|e| e.is_a?(Array) }
+  def flatten
+    @matrix.flatten
   end
 
   def mark(player, position_x, position_y)
