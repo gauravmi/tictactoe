@@ -46,7 +46,6 @@ class Board
     end
 
     return position[0] unless position.empty?
-    empty_position_on_right_diagonal(player)
   end
 
   def is_winning?(player)
