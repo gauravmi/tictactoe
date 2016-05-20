@@ -6,9 +6,10 @@ board        = Board.new
 player       = UserPlayer.instance(board)
 robot_player = RobotPlayer.instance(board)
 
+# player.move(0, 0)
+p board.player_at(1,1)
 
-player.move(0, 0)
-robot_player.move
+# robot_player.move
 # player.move(2, 2)
 
-print board
+# print board

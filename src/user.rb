@@ -1,4 +1,4 @@
-load './player.rb'
+load './src/player.rb'
 
 class UserPlayer < Player
   attr_reader :player

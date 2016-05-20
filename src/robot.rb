@@ -1,5 +1,5 @@
-load './board_analyser.rb'
-load './player.rb'
+load './src/board_analyser.rb'
+load './src/player.rb'
 
 class RobotPlayer < Player
   include BoardAnalyzer

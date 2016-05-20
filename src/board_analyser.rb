@@ -1,50 +1,51 @@
-load './player.rb'
+load './src/player.rb'
 
 require 'pry'
 module BoardAnalyzer
-    def with_strategy
-        position_x, position_y = analyze_and_get_position
-        yield(position_x, position_y)
-    end
+  def with_strategy
+    position_x, position_y = analyze_and_get_position
+    yield(position_x, position_y)
+  end
 
-    def opponent(player)
-        ObjectSpace.each_object(Player).select{|p| p.class != player.class }.first
-    end
+  def opponent(player)
+    ObjectSpace.each_object(Player).select{|p| p.class != player.class }.first
+  end
 
-    private
-    def analyze_and_get_position
-        winning_position = robot_winning?
-        return winning_position if winning_position
-        
-        position = @board.is_winning?(opponent(self))
-        return position if position
+  private
+  def analyze_and_get_position
+    winning_position = robot_winning?
+    return winning_position if winning_position
 
-        find_appropriate_position
-    end
+    dont_let_opponent_win_position = @board.is_winning?(opponent(self))
+    return dont_let_opponent_win_position if dont_let_opponent_win_position
 
-    def robot_winning?
-        @board.is_winning?(self)
-    end
+    find_appropriate_position
+  end
 
-    def dont_let_opponent_win_position
+  def robot_winning?
+    @board.is_winning?(self)
+  end
 
-    end
+  def is_user_player_winning?
+    @board.is_user_player_winning?(self)
+  end
 
-    def winning_position
-    end
+  def marking_first_time?
+      [ @board.each_row.select{|r| r.select{|e| e == self.to_s } },
+      @board.each_column.select{|c| c.select{|e| e == self.to_s } },
+      @board.each_diagonal.select{|d| d.select{|e| e == self.to_s } }].any?
+  end
 
-    def is_user_player_winning?
-        @board.is_user_player_winning?(self)
-    end
+  def mark_random
+    @board.mark_random
+  end
 
-    def find_appropriate_position
-
-    end
+  def find_appropriate_position
+    mark_random if marking_first_time?
+  end
 end
 
 
 # x x x
 # x x x
 # x x x
-
-
